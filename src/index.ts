@@ -15,7 +15,6 @@ app.use("/application", applicationRouter);
  * @returns Promise<void>
  */
 app.get("/health", async (req, res) => {
-  console.log("Healthcheck");
   return res.status(200).send("OK");
 });
 

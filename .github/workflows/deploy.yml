@@ -1,4 +1,4 @@
-name: Docker Image CI/CD Action
+name: Deploy SSA Bot to Lightsail Container Service
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
      - '*'
 
 jobs:
-  deploy_image:
+  deploy_to_lightsail_container_service:
     runs-on: ubuntu-latest
 
     steps:
