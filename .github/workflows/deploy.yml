@@ -30,19 +30,19 @@ jobs:
     - name: Build and tag Docker image
       run: |
         echo "Building Docker image..."
-        docker build -t "public.ecr.aws/b3c4u5n1/filecoin-ssa-bot-new-infrastructure:${{ github.ref_name }}" .
+        docker build -t "public.ecr.aws/b3c4u5n1/filplus-ssa-bot:${{ github.ref_name }}" .
         
     - name: Push Docker image to ECR
       run: |
         echo "Pushing Docker image to ECR..."
-        docker push "public.ecr.aws/b3c4u5n1/filecoin-ssa-bot-new-infrastructure:${{ github.ref_name }}"
+        docker push "public.ecr.aws/b3c4u5n1/filplus-ssa-bot:${{ github.ref_name }}"
 
     - name: Deploy to Lightsail Container Service
       run: |
         # Define containers.json with desired settings
         echo '{
-          "filecoin-ssa-bot": {
-            "image": "public.ecr.aws/b3c4u5n1/filecoin-ssa-bot-new-infrastructure:${{ github.ref_name }}",
+          "filplus-ssa-bot": {
+            "image": "public.ecr.aws/b3c4u5n1/filplus-ssa-bot:${{ github.ref_name }}",
             "ports": {
               "3000": "HTTP"
             },
@@ -58,7 +58,7 @@ jobs:
         
         # Define public-endpoint.json
         echo '{
-          "containerName": "filecoin-ssa-bot",
+          "containerName": "filplus-ssa-bot",
           "containerPort": 3000,
           "healthCheck": {
             "healthyThreshold": 2,
@@ -72,7 +72,7 @@ jobs:
         
         # Deploy to Lightsail Container Service
         aws lightsail create-container-service-deployment \
-          --service-name filecoin-ssa-bot \
+          --service-name filplus-ssa-bot \
           --region us-east-1 \
           --containers file://containers.json \
           --public-endpoint file://public-endpoint.json
