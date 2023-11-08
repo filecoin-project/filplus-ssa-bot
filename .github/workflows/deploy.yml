@@ -61,8 +61,8 @@ jobs:
           "containerName": "filecoin-ssa-bot",
           "containerPort": 3000,
           "healthCheck": {
-            "healthyThreshold": 1,
-            "unhealthyThreshold": 5,
+            "healthyThreshold": 2,
+            "unhealthyThreshold": 2,
             "timeoutSeconds": 5,
             "intervalSeconds": 60,
             "path": "/health",
