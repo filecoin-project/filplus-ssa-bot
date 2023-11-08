@@ -1,0 +1,11 @@
+node_modules
+.env
+.env.prod
+.env.localhost
+.env.test
+.DS_Store
+yarn.lock
+dist
+coverage
+.vscode
+src/.DS_Store

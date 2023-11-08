@@ -1,0 +1,14 @@
+[
+    {
+    "identifier":"yummy",
+    "notary_msig":"f101",
+    "notary_msig_datacap": "10PiB",
+    "notary_msig_issue_number" : "100"
+     },
+    {
+    "id":"abc",
+    "notary_msig":"f102",
+    "notary_msig_datacap": "10PiB",
+    "notary_msig_issue_number" : "101"
+    }
+]

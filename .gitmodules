@@ -1,0 +1,3 @@
+[submodule "deps/filecoin-content"]
+	path = deps/filecoin-content
+	url = https://github.com/keyko-io/filecoin-content.git
