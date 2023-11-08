@@ -2,7 +2,6 @@ import axios from "axios";
 import { config } from "../config";
 import { logDebug } from "../utils/consoleLogger";
 import type {
-  ApiAllowanceInTwoWeeksResponse,
   ApiAllowanceResponse,
   ApiClientsResponse,
   DmobClient,
@@ -77,22 +76,3 @@ export const getApiClients = async (): Promise<ApiClientsResponse> => {
     };
   }
 };
-
-/**
- * Get the allowance assigned to LDN V3 in the last 2 weeks.
- *
- * @returns {Promise<ApiAllowanceInTwoWeeksResponse>} ApiAllowanceInTwoWeeksResponse - The response from the API.
- */
-export const getAllowanceAssignedToLdnV3InLast2Weeks =
-  async (): Promise<ApiAllowanceInTwoWeeksResponse> => {
-    logDebug(`Requesting allowance assigned to LDN V3 in the last 2 weeks`);
-    const ret = await axios({
-      method: "GET",
-      url: `${config.filplusApi}/getAllowanceAssignedToLdnV3InLast2Weeks`,
-      headers: {
-        "x-api-key": config.filplusApiKey,
-      },
-    });
-
-    return ret.data;
-  };

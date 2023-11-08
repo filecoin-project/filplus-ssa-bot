@@ -1,16 +1,3 @@
-export interface NodeClient {
-  idAddress: string;
-  address: string;
-  datacap: string;
-}
-
-export interface V3Exception {
-  identifier: string;
-  notary_msig: string;
-  notary_msig_datacap: string;
-  notary_msig_issue_number: string;
-}
-
 export interface ApiClientsResponse {
   error: string;
   success: boolean;
@@ -23,65 +10,6 @@ export interface ApiAllowanceResponse {
   data: string;
 }
 
-export interface GithubLabel {
-  id: number;
-  name: string;
-}
-
-export interface GithubIssue {
-  id: number;
-  title: string;
-  body: string;
-  number: number;
-  state: "open" | "closed";
-  labels: GithubLabel[];
-}
-
-export interface checkLabelReturn {
-  number: number;
-  label: string;
-  skip: boolean;
-}
-
-export interface MsigReturn {
-  datacapRemainingBytes: number | null;
-  margin: number | null;
-  requested: boolean;
-  error: string;
-}
-export interface NewDatacapRequestBodyReturn {
-  notaryAddress: string;
-  body: string;
-}
-
-export interface issue {
-  number?: number;
-  name: string;
-  region: string;
-  website: string;
-  datacapRequested: string;
-  dataCapWeeklyAllocation: string;
-  address: string;
-  isCustomNotary: string;
-  identifier: string;
-  correct: boolean;
-  errorMessage: string;
-  errorDetails: string;
-  isAddressFormatted: boolean;
-  idAddress?: string;
-  datacap?: string;
-  allowanceArray?: AllowanceArrayElement[];
-  lastRequest?: AllowanceArrayElement;
-}
-
-export interface PostRequestCommentsReturn {
-  success: boolean;
-  error: string;
-}
-
-export interface ApiAllowanceInTwoWeeksResponse {
-  allowance: string;
-}
 export interface ByteConverterAutoscaleOptions {
   preferByte: boolean;
   preferBit: boolean;

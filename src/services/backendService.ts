@@ -49,7 +49,7 @@ export const getApplication = async (
   appId: string,
 ): Promise<RequestApplicationReturn> => {
   logDebug(`Requesting application ${appId} from backend`);
-  console.log(`${config.backendApi}/application/${appId}`);
+
   try {
     const response = await axios({
       method: "GET",
