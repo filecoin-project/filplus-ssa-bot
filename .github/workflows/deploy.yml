@@ -50,7 +50,7 @@ jobs:
               "AWS_ACCESS_KEY_ID": "${{secrets.AWS_ACCESS_KEY_ID}}",
               "AWS_SECRET_ACCESS_KEY": "${{secrets.AWS_SECRET_ACCESS_KEY}}",
               "BACKEND_API_URL": "${{secrets.BACKEND_API_URL}}",
-              "DMOB_API_KEY": "${{secrets.DMOB_API_KEY}}"
+              "DMOB_API_KEY": "${{secrets.DMOB_API_KEY}}",
               "DMOB_API_URL": "${{secrets.DMOB_API_URL}}"
             }
           }
