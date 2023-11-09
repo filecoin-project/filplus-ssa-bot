@@ -132,3 +132,20 @@ export const postApplicationTotalDCReached = async (
     };
   }
 };
+
+/**
+ * Gets the health status of the backend.
+ *
+ * @returns {Promise<boolean>} The response from the backend.
+ */
+export const getBackendHealth = async (): Promise<boolean> => {
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `${config.backendApi}/health`,
+    });
+    return response.data === "OK";
+  } catch (error) {
+    return false;
+  }
+};

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { config } from "../config";
-import { logDebug } from "../utils/consoleLogger";
+import { logDebug, logError } from "../utils/consoleLogger";
 import type {
   ApiAllowanceResponse,
   ApiClientsResponse,
@@ -74,5 +74,28 @@ export const getApiClients = async (): Promise<ApiClientsResponse> => {
       error: errMessage,
       success: false,
     };
+  }
+};
+
+/**
+ * Get the health of the Dmob API.
+ *
+ * @returns {Promise<boolean>} boolean - The response from the API.
+ */
+export const getDmobHealth = async (): Promise<boolean> => {
+  logDebug(`Requesting clients from dmob api`);
+  try {
+    await axios({
+      method: "GET",
+      url: `${config.filplusApi}/getAllowanceAssignedToLdnV3InLast2Weeks`,
+      headers: {
+        "x-api-key": config.filplusApiKey,
+      },
+    });
+    return true;
+  } catch (error) {
+    const errMessage = `Error accessing Dmob API /getAllowanceAssignedToLdnV3InLast2Weeks: ${error.message}`;
+    logError(errMessage);
+    return false;
   }
 };
