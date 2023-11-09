@@ -83,7 +83,6 @@ export const getApiClients = async (): Promise<ApiClientsResponse> => {
  * @returns {Promise<boolean>} boolean - The response from the API.
  */
 export const getDmobHealth = async (): Promise<boolean> => {
-  logDebug(`Requesting clients from dmob api`);
   try {
     await axios({
       method: "GET",
