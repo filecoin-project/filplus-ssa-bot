@@ -1,0 +1,78 @@
+name: Deploy SSA Bot to Lightsail Container Service
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_to_lightsail_container_service:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1
+
+    - name: Login to Amazon ECR Public
+      id: login-ecr-public
+      uses: aws-actions/amazon-ecr-login@v1
+      with:
+          mask-password: 'true'
+          registry-type: public
+
+    - name: Build and tag Docker image
+      run: |
+        echo "Building Docker image..."
+        docker build -t "public.ecr.aws/b3c4u5n1/filplus-ssa-bot:${{ github.ref_name }}" .
+        
+    - name: Push Docker image to ECR
+      run: |
+        echo "Pushing Docker image to ECR..."
+        docker push "public.ecr.aws/b3c4u5n1/filplus-ssa-bot:${{ github.ref_name }}"
+
+    - name: Deploy to Lightsail Container Service
+      run: |
+        # Define containers.json with desired settings
+        echo '{
+          "filplus-ssa-bot": {
+            "image": "public.ecr.aws/b3c4u5n1/filplus-ssa-bot:${{ github.ref_name }}",
+            "ports": {
+              "3000": "HTTP"
+            },
+            "environment": { 
+              "AWS_ACCESS_KEY_ID": "${{secrets.AWS_ACCESS_KEY_ID}}",
+              "AWS_SECRET_ACCESS_KEY": "${{secrets.AWS_SECRET_ACCESS_KEY}}",
+              "BACKEND_API_URL": "${{secrets.STAGING_BACKEND_API_URL}}",
+              "DMOB_API_KEY": "${{secrets.DMOB_API_KEY}}",
+              "DMOB_API_URL": "${{secrets.DMOB_API_URL}}"
+            }
+          }
+        }' > containers.json
+        
+        # Define public-endpoint.json
+        echo '{
+          "containerName": "filplus-ssa-bot",
+          "containerPort": 3000,
+          "healthCheck": {
+            "healthyThreshold": 5,
+            "unhealthyThreshold":52,
+            "timeoutSeconds": 30,
+            "intervalSeconds": 60,
+            "path": "/health",
+            "successCodes": "200"
+          }
+        }' > public-endpoint.json
+        
+        # Deploy to Lightsail Container Service
+        aws lightsail create-container-service-deployment \
+          --service-name filplus-ssa-bot-prod \
+          --region us-east-1 \
+          --containers file://containers.json \
+          --public-endpoint file://public-endpoint.json

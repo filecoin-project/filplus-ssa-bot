@@ -49,7 +49,7 @@ jobs:
             "environment": { 
               "AWS_ACCESS_KEY_ID": "${{secrets.AWS_ACCESS_KEY_ID}}",
               "AWS_SECRET_ACCESS_KEY": "${{secrets.AWS_SECRET_ACCESS_KEY}}",
-              "BACKEND_API_URL": "${{secrets.BACKEND_API_URL}}",
+              "BACKEND_API_URL": "${{secrets.PROD_BACKEND_API_URL}}",
               "DMOB_API_KEY": "${{secrets.DMOB_API_KEY}}",
               "DMOB_API_URL": "${{secrets.DMOB_API_URL}}"
             }
@@ -58,7 +58,7 @@ jobs:
         
         # Define public-endpoint.json
         echo '{
-          "containerName": "filplus-ssa-bot",
+          "containerName": "filplus-ssa-bot-prod",
           "containerPort": 3000,
           "healthCheck": {
             "healthyThreshold": 2,
