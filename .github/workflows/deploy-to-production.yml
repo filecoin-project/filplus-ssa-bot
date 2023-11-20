@@ -1,4 +1,4 @@
-name: Deploy SSA Bot to Lightsail Container Service
+name: Deploy SSA Bot to Production Container Service
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
      - '*'
 
 jobs:
-  deploy_to_lightsail_container_service:
+  deploy_to_production_container_service:
     runs-on: ubuntu-latest
 
     steps:
@@ -63,7 +63,7 @@ jobs:
           "healthCheck": {
             "healthyThreshold": 2,
             "unhealthyThreshold": 2,
-            "timeoutSeconds": 5,
+            "timeoutSeconds": 30,
             "intervalSeconds": 60,
             "path": "/health",
             "successCodes": "200"
