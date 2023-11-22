@@ -137,6 +137,7 @@ export interface Client {
   Industry: string;
   Website: string;
   "Social Media": string;
+  "Social Media Type": string;
   Role: string;
 }
 

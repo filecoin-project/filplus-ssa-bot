@@ -130,6 +130,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
@@ -210,6 +211,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
@@ -287,6 +289,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
@@ -368,6 +371,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
@@ -443,6 +447,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
@@ -517,6 +522,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
@@ -598,6 +604,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "Twitter",
           Role: "ClientRole",
         },
         Project: {
