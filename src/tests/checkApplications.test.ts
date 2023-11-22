@@ -130,6 +130,7 @@ describe("Datacap Allocation Functions", () => {
           Industry: "ClientIndustry",
           Website: "ClientWebsite",
           "Social Media": "ClientSM",
+          "Social Media Type": "ClientSMType",
           Role: "ClientRole",
         },
         Project: {
