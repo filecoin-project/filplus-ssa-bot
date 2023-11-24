@@ -15,6 +15,42 @@ const byteConverter = new ByteConverter();
  * @returns number
  */
 export function anyToBytes(inputDatacap: string): number {
+  const allowedExtensions = [
+    "b",
+    "B",
+    "kb",
+    "kB",
+    "Kib",
+    "KiB",
+    "Mb",
+    "MB",
+    "Mib",
+    "MiB",
+    "Gb",
+    "GB",
+    "Gib",
+    "GiB",
+    "Tb",
+    "TB",
+    "Tib",
+    "TiB",
+    "Pb",
+    "PB",
+    "Pib",
+    "PiB",
+    "Eb",
+    "EB",
+    "Eib",
+    "EiB",
+    "Zb",
+    "ZB",
+    "Zib",
+    "ZiB",
+    "Yb",
+    "YB",
+    "Yib",
+    "YiB",
+  ];
   const formatDc = inputDatacap
     .replace(/[t]/g, "T")
     .replace(/[b]/g, "B")
@@ -22,6 +58,14 @@ export function anyToBytes(inputDatacap: string): number {
     .replace(/[I]/g, "i")
     .replace(/\s*/g, "");
   const ext = formatDc.replace(/[0-9.]/g, "");
+
+  if (!allowedExtensions.includes(ext)) {
+    throw new Error(
+      `Invalid datacap format. Allowed extensions are: ${allowedExtensions.join(
+        ", ",
+      )}`,
+    );
+  }
   const datacap = formatDc.replace(/[^0-9.]/g, "");
   const bytes = byteConverter.convert(parseFloat(datacap), ext, "B");
   return bytes;

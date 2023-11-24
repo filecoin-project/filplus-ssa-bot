@@ -55,9 +55,10 @@ export const getApplication = async (
       method: "GET",
       url: `${config.backendApi}/application/${appId}`,
     });
+    const application = response.data as Application | null;
+
     return {
-      application:
-        response.data.length > 0 ? (response.data[0] as Application) : null,
+      application,
       error: "",
       success: true,
     };
