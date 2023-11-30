@@ -25,7 +25,7 @@ As an open-source project, we welcome and encourage the community to contribute 
 - **Push to Your Fork**: Push your changes to your forked repository.
 - **Create a Pull Request**: Submit a pull request from your forked repository to our main repository.
 
-Please read through our <code>CONTRIBUTING.md</code> file for detailed instructions on how to contribute.
+Please read through our [CONTRIBUTING.md](CONTRIBUTING.md) file for detailed instructions on how to contribute.
 
 ## Usage
 This bot is specifically designed as a part of the Filplus program and is not intended for general installation or standalone use. Its primary function is to automate certain processes within the LDN program, contributing to the overall efficiency and effectiveness of datacap allocation.

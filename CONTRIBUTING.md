@@ -64,4 +64,4 @@ All TypeScript code must adhere to the [TypeScript coding guidelines](https://mk
 
 - Use [Markdown](https://daringfireball.net/projects/markdown/) for documentation.
 - Reference the methods and classes you're describing.
-- Update the documentation with each change in the codebase that affects how users build, test, and interact with the
+- Update the documentation with each change in the codebase that affects how users build, test, and interact with the project.
