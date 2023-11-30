@@ -34,4 +34,12 @@ This bot is specifically designed as a part of the Filplus program and is not in
 If you have any questions, suggestions, or need assistance, please reach out to our community channels. We strive to build a welcoming and supportive environment for all our contributors and users.
 
 ## License
-This project is open-sourced under MIT. We believe in the power of open source and encourage the community to help us improve and maintain this project.
+This project is dual-licensed under the `Permissive License Stack`, which means you can choose to use the project under either:
+
+- The Apache License 2.0, which is a free and open-source license, focusing on patent rights and copyright notices. For more details, see the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0).
+
+- The MIT License, a permissive and open-source license, known for its broad permissions and limited restrictions. For more details, see the [MIT License](https://opensource.org/licenses/MIT).
+
+You may not use the contents of this repository except in compliance with one of these licenses. For an extended clarification of the intent behind the choice of licensing, please refer to the `LICENSE` file in this repository or visit [Permissive License Stack Explanation](https://protocol.ai/blog/announcing-the-permissive-license-stack/).
+
+For the full license text, please see the [LICENSE](LICENSE) file in this repository.
