@@ -1,6 +1,6 @@
 {
   "name": "filecoin-ssa-bot",
-  "version": "v0.2.10",
+  "version": "v0.2.11",
   "description": "",
   "main": "index.js",
   "scripts": {
