@@ -55,7 +55,7 @@ export const getApplication = async (
       method: "GET",
       url: `${config.backendApi}/application/${appId}`,
     });
-    const application = response.data as Application | null;
+    const application = response.data as Application;
 
     return {
       application,
