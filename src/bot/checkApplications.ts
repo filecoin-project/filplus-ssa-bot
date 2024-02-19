@@ -1,5 +1,6 @@
 import { getApiClients } from "../services/filplusService";
 import {
+  getAllocators,
   getApplications,
   postApplicationRefill,
   postApplicationTotalDCReached,
@@ -15,6 +16,7 @@ import {
 } from "../types/types";
 import { config } from "../config";
 import { anyToBytes, calculateAllocationToRequest } from "../utils/utils";
+import { log } from "console";
 
 const metrics = Metrics.getInstance();
 
@@ -24,34 +26,46 @@ const metrics = Metrics.getInstance();
  * @returns Promise<void>
  */
 export const checkApplications = async (): Promise<void> => {
-  const { data: apiClients, error, success } = await getApiClients();
+  const { data: apiClients, error: apiClientsError, success: apiClientsSuccess } = await getApiClients();
 
-  if (!success) {
-    logError(`Get Api Clients Error: ${error}`);
+  if (!apiClientsSuccess) {
+    logError(`Get Api Clients Error: ${apiClientsError}`);
   }
 
-  const allApplications = await getApplications();
-  if (!allApplications.success) {
-    logError(`Get Applications Error: ${allApplications.error}`);
-    return;
+  const {data: allocators, error: allocatorsError, success: allocatorSuccess} = await getAllocators();
+  if (!allocatorSuccess) {
+    logError(`Get Allocators Error: ${allocatorsError}`);
   }
 
-  logDebug(`Found ${allApplications.data.length} applications`);
-
-  metrics.updateMetric("applicationsListed", allApplications.data.length);
+  logDebug(`Found ${allocators.length} repos`);
 
   await Promise.allSettled(
-    allApplications.data.map(async (application: Application) => {
-      await (async () => {
-        try {
-          await checkApplication(application, apiClients);
-        } catch (e) {
-          logError(`Single Client Topup Errors: ${e.message}`);
-          throw e;
+    allocators.map(async ({owner, repo}) => {
+        const allApplications = await getApplications(owner, repo);
+        if (!allApplications.success) {
+          logError(`Get Applications Error: ${allApplications.error}`);
+          return;
         }
-      })();
+      
+        logDebug(`Found ${allApplications.data.length} applications in ${owner}/${repo}`);
+      
+        metrics.updateMetric("applicationsListed", allApplications.data.length);
+      
+        await Promise.allSettled(
+          allApplications.data.map(async (application: Application) => {
+            await (async () => {
+              try {
+                await checkApplication(application, apiClients, owner, repo);
+              } catch (e) {
+                logError(`Single Client Topup Errors: ${e.message}`);
+                throw e;
+              }
+            })();
+          }),
+        );
     }),
   );
+
 };
 
 /**
@@ -59,11 +73,15 @@ export const checkApplications = async (): Promise<void> => {
  *
  * @param {Application} application - The application object.
  * @param {DmobClient[]} apiClients - The list of API clients.
+ * @param {string} owner - The owner of the repo.
+ * @param {string} repo - The name of the repo.
  * @returns Promise<void>
  */
 export const checkApplication = async (
   application: Application,
   apiClients: DmobClient[],
+  owner: string,
+  repo: string
 ): Promise<void> => {
   logGeneral(
     `${config.logPrefix} ${application.ID} Start checking application`,
@@ -121,7 +139,7 @@ export const checkApplication = async (
     )}% - Needs more allowance`,
   );
   const amountToRequest = calculateAmountToRequest(application);
-  await requestAllowance(application, amountToRequest);
+  await requestAllowance(application, owner, repo, amountToRequest);
 
   metrics.incrementMetric("ApplicationsAllocationRequested");
 };
@@ -211,12 +229,14 @@ export const computeMargin = (
  */
 export const requestAllowance = async (
   application: Application,
+  owner: string,
+  repo: string,
   amountToRequest: RequestAmount,
 ): Promise<RequestAllowanceReturn> => {
   let response;
   if (amountToRequest.totalDatacapReached) {
     try {
-      response = await postApplicationTotalDCReached(application.ID);
+      response = await postApplicationTotalDCReached(application.ID, owner, repo);
     } catch (e) {
       logError(`Single Client Topup Error: ${e.message}`);
       return { success: false, error: e.message };
@@ -225,11 +245,13 @@ export const requestAllowance = async (
     try {
       response = await postApplicationRefill(
         application.ID,
+        owner,
+        repo,
         amountToRequest.amount.toString(),
         amountToRequest.amountType,
       );
       logGeneral(
-        `${config.logPrefix} ${application.ID} Refill request sent for ${amountToRequest.amount} ${amountToRequest.amountType}`,
+        `${config.logPrefix} ${owner}/${repo} - ${application.ID} Refill request sent for ${amountToRequest.amount} ${amountToRequest.amountType}`,
       );
     } catch (e) {
       logError(`Single Client Topup Error: ${e.message}`);

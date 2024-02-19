@@ -2,6 +2,7 @@ import axios from "axios";
 import { config } from "../config";
 import { logDebug } from "../utils/consoleLogger";
 import {
+  type RequestAllocatorsReturn,
   type RequestApplicationsReturn,
   type RequestApplicationReturn,
   type Application,
@@ -9,16 +10,47 @@ import {
 } from "../types/types";
 
 /**
+ * Gets all the allocators from the backend
+ *
+ * @returns {Promise<RequestAllocatorsReturn>} The list of allocators
+ */
+export const getAllocators = async (): Promise<RequestAllocatorsReturn> => {
+  logDebug(`Requesting allocators from backend`);
+  try {
+    const response = await axios({
+      method: "GET",
+      url: `${config.backendApi}/allocators`,
+    });
+    return {
+      data: response.data,
+      error: "",
+      success: true,
+    };
+  } catch (error) {
+    const errMessage = `Error accessing Backend API /allocator: ${error.message}`;
+    return {
+      data: [],
+      error: errMessage,
+      success: false,
+    };
+  }
+}
+
+/**
  * Gets all the applications from the backend.
  *
  * @returns {Promise<RequestApplicationsReturn>} The list of applications.
  */
-export const getApplications = async (): Promise<RequestApplicationsReturn> => {
-  logDebug(`Requesting applications from backend`);
+export const getApplications = async (owner: string, repo: string): Promise<RequestApplicationsReturn> => {
+  logDebug(`Requesting ${owner}/${repo} applications from backend`);
   try {
     const response = await axios({
       method: "GET",
       url: `${config.backendApi}/application/merged`,
+      params: {
+        owner,
+        repo,
+      },
     });
     return {
       data: response.data.map((appUnit) => {
@@ -31,7 +63,7 @@ export const getApplications = async (): Promise<RequestApplicationsReturn> => {
       success: true,
     };
   } catch (error) {
-    const errMessage = `Error accessing Backend API /application/merged: ${error.message}`;
+    const errMessage = `Error accessing Backend API /application/merged ${owner}/${repo}: ${error.message}`;
     return {
       data: [],
       error: errMessage,
@@ -47,13 +79,20 @@ export const getApplications = async (): Promise<RequestApplicationsReturn> => {
  */
 export const getApplication = async (
   appId: string,
+  owner: string,
+  repo: string
 ): Promise<RequestApplicationReturn> => {
   logDebug(`Requesting application ${appId} from backend`);
 
   try {
     const response = await axios({
       method: "GET",
-      url: `${config.backendApi}/application/${appId}`,
+      url: `${config.backendApi}/application`,
+      params: {
+        id: appId,
+        owner,
+        repo,
+      },
     });
     const application = response.data as Application;
 
@@ -81,15 +120,19 @@ export const getApplication = async (
  */
 export const postApplicationRefill = async (
   applicationId: string,
+  owner: string,
+  repo: string,
   amount: string,
   amountType,
 ): Promise<RequestAllowanceReturn> => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${config.backendApi}/application/${applicationId}/refill`,
+      url: `${config.backendApi}/application/refill`,
       data: {
         id: applicationId,
+        owner,
+        repo,
         amount,
         amount_type: amountType,
       },
@@ -99,7 +142,7 @@ export const postApplicationRefill = async (
       success: response.data as boolean,
     };
   } catch (error) {
-    const errMessage = `Error accessing Backend API /applications/refill: ${error.message}`;
+    const errMessage = `Error accessing Backend API /application/refill ${owner}/${repo}: ${error.message}`;
     return {
       error: errMessage,
       success: false,
@@ -115,18 +158,25 @@ export const postApplicationRefill = async (
  */
 export const postApplicationTotalDCReached = async (
   applicationId: string,
+  owner: string,
+  repo: string
 ): Promise<RequestAllowanceReturn> => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${config.backendApi}/application/${applicationId}/totaldcreached`,
+      url: `${config.backendApi}/application/totaldcreached`,
+      data: {
+        id: applicationId,
+        owner,
+        repo,
+      },
     });
     return {
       error: "",
       success: response.data as boolean,
     };
   } catch (error) {
-    const errMessage = `Error accessing Backend API /application/${applicationId}/totaldcreached: ${error.message}`;
+    const errMessage = `Error accessing Backend API /application/totaldcreached: ${error.message}`;
     return {
       error: errMessage,
       success: false,
