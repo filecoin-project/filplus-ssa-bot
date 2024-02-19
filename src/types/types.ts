@@ -184,6 +184,21 @@ export interface Signer {
   "Github Username": string;
 }
 
+export interface Allocator {
+  id: number;
+  owner: string;
+  repo: string;
+  installation_id: number;
+  multisig_address: string;
+  verifiers_gh_handles: string;
+}
+
+export interface RequestAllocatorsReturn {
+  success: boolean;
+  error: string;
+  data: Allocator[];
+}
+
 export interface RequestApplicationsReturn {
   success: boolean;
   error: string;

@@ -33,6 +33,7 @@ router.post("/all", async (req, res) => {
  */
 router.post("/:id", async (req, res) => {
   const appId = req.params.id;
+  const { owner, repo } = req.body;
 
   try {
     const { data: apiClients, error, success } = await getApiClients();
@@ -44,7 +45,7 @@ router.post("/:id", async (req, res) => {
       application,
       error: appError,
       success: appSuccess,
-    } = await getApplication(appId);
+    } = await getApplication(appId, owner, repo);
     if (!appSuccess) {
       throw new Error(`Get Application Error: ${appError}`);
     }
@@ -53,7 +54,7 @@ router.post("/:id", async (req, res) => {
       throw new Error(`Application ${appId} not found`);
     }
 
-    await checkApplication(application, apiClients);
+    await checkApplication(application, apiClients, owner, repo);
     return res
       .status(200)
       .send(`Application ${appId} check completed successfully`);
