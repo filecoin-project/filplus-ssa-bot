@@ -16,7 +16,6 @@ import {
 } from "../types/types";
 import { config } from "../config";
 import { anyToBytes, calculateAllocationToRequest } from "../utils/utils";
-import { log } from "console";
 
 const metrics = Metrics.getInstance();
 
@@ -26,13 +25,21 @@ const metrics = Metrics.getInstance();
  * @returns Promise<void>
  */
 export const checkApplications = async (): Promise<void> => {
-  const { data: apiClients, error: apiClientsError, success: apiClientsSuccess } = await getApiClients();
+  const {
+    data: apiClients,
+    error: apiClientsError,
+    success: apiClientsSuccess,
+  } = await getApiClients();
 
   if (!apiClientsSuccess) {
     logError(`Get Api Clients Error: ${apiClientsError}`);
   }
 
-  const {data: allocators, error: allocatorsError, success: allocatorSuccess} = await getAllocators();
+  const {
+    data: allocators,
+    error: allocatorsError,
+    success: allocatorSuccess,
+  } = await getAllocators();
   if (!allocatorSuccess) {
     logError(`Get Allocators Error: ${allocatorsError}`);
   }
@@ -40,32 +47,33 @@ export const checkApplications = async (): Promise<void> => {
   logDebug(`Found ${allocators.length} repos`);
 
   await Promise.allSettled(
-    allocators.map(async ({owner, repo}) => {
-        const allApplications = await getApplications(owner, repo);
-        if (!allApplications.success) {
-          logError(`Get Applications Error: ${allApplications.error}`);
-          return;
-        }
-      
-        logDebug(`Found ${allApplications.data.length} applications in ${owner}/${repo}`);
-      
-        metrics.updateMetric("applicationsListed", allApplications.data.length);
-      
-        await Promise.allSettled(
-          allApplications.data.map(async (application: Application) => {
-            await (async () => {
-              try {
-                await checkApplication(application, apiClients, owner, repo);
-              } catch (e) {
-                logError(`Single Client Topup Errors: ${e.message}`);
-                throw e;
-              }
-            })();
-          }),
-        );
+    allocators.map(async ({ owner, repo }) => {
+      const allApplications = await getApplications(owner, repo);
+      if (!allApplications.success) {
+        logError(`Get Applications Error: ${allApplications.error}`);
+        return;
+      }
+
+      logDebug(
+        `Found ${allApplications.data.length} applications in ${owner}/${repo}`,
+      );
+
+      metrics.updateMetric("applicationsListed", allApplications.data.length);
+
+      await Promise.allSettled(
+        allApplications.data.map(async (application: Application) => {
+          await (async () => {
+            try {
+              await checkApplication(application, apiClients, owner, repo);
+            } catch (e) {
+              logError(`Single Client Topup Errors: ${e.message}`);
+              throw e;
+            }
+          })();
+        }),
+      );
     }),
   );
-
 };
 
 /**
@@ -81,7 +89,7 @@ export const checkApplication = async (
   application: Application,
   apiClients: DmobClient[],
   owner: string,
-  repo: string
+  repo: string,
 ): Promise<void> => {
   logGeneral(
     `${config.logPrefix} ${application.ID} Start checking application`,
@@ -236,7 +244,11 @@ export const requestAllowance = async (
   let response;
   if (amountToRequest.totalDatacapReached) {
     try {
-      response = await postApplicationTotalDCReached(application.ID, owner, repo);
+      response = await postApplicationTotalDCReached(
+        application.ID,
+        owner,
+        repo,
+      );
     } catch (e) {
       logError(`Single Client Topup Error: ${e.message}`);
       return { success: false, error: e.message };
