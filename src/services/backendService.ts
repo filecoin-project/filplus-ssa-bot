@@ -34,14 +34,17 @@ export const getAllocators = async (): Promise<RequestAllocatorsReturn> => {
       success: false,
     };
   }
-}
+};
 
 /**
  * Gets all the applications from the backend.
  *
  * @returns {Promise<RequestApplicationsReturn>} The list of applications.
  */
-export const getApplications = async (owner: string, repo: string): Promise<RequestApplicationsReturn> => {
+export const getApplications = async (
+  owner: string,
+  repo: string,
+): Promise<RequestApplicationsReturn> => {
   logDebug(`Requesting ${owner}/${repo} applications from backend`);
   try {
     const response = await axios({
@@ -80,7 +83,7 @@ export const getApplications = async (owner: string, repo: string): Promise<Requ
 export const getApplication = async (
   appId: string,
   owner: string,
-  repo: string
+  repo: string,
 ): Promise<RequestApplicationReturn> => {
   logDebug(`Requesting application ${appId} from backend`);
 
@@ -159,7 +162,7 @@ export const postApplicationRefill = async (
 export const postApplicationTotalDCReached = async (
   applicationId: string,
   owner: string,
-  repo: string
+  repo: string,
 ): Promise<RequestAllowanceReturn> => {
   try {
     const response = await axios({
