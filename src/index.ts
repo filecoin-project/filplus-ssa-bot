@@ -1,7 +1,7 @@
 import express from "express";
 import applicationRouter from "./server/routes";
-// import { getDmobHealth } from "./services/filplusService";
-// import { getBackendHealth } from "./services/backendService";
+import { getDmobHealth } from "./services/filplusService";
+import { getBackendHealth } from "./services/backendService";
 import "./scheduler";
 
 const app = express();
@@ -17,12 +17,12 @@ app.use("/application", applicationRouter);
  * @returns Promise<void>
  */
 app.get("/health", async (req, res) => {
-  // if (!(await getBackendHealth())) {
-  //   return res.status(400).send("Backend service is down");
-  // }
-  // if (!(await getDmobHealth())) {
-  //   return res.status(400).send("Dmob service is down");
-  // }
+  if (!(await getBackendHealth())) {
+    return res.status(400).send("Backend service is down");
+  }
+  if (!(await getDmobHealth())) {
+    return res.status(400).send("Dmob service is down");
+  }
   return res.status(200).send("OK");
 });
 
