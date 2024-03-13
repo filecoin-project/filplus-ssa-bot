@@ -55,7 +55,7 @@ export const checkApplications = async (): Promise<void> => {
       }
 
       logDebug(
-        `Found ${allApplications.data.length} applications in ${owner}/${repo}`,
+        `Found ${allApplications.data.length} applications merged in ${owner}/${repo}`,
       );
 
       metrics.updateMetric("applicationsListed", allApplications.data.length);
