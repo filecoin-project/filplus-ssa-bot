@@ -128,7 +128,7 @@ export const checkApplication = async (
     lastRequestAllowance["Allocation Amount"],
   );
 
-  if (margin < 0.25) {
+  if (margin > 0.25) {
     logGeneral(
       `${config.logPrefix} ${
         application.ID
