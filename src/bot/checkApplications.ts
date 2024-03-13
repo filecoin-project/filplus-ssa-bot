@@ -128,7 +128,7 @@ export const checkApplication = async (
     lastRequestAllowance["Allocation Amount"],
   );
 
-  if (margin > 0.25) {
+  if (margin < 0.25) {
     logGeneral(
       `${config.logPrefix} ${
         application.ID
@@ -200,11 +200,7 @@ export const getLastRequestAllowance = (
       allocation.ID === application.Lifecycle["Active Request ID"],
   );
 
-  if (
-    lastAllocation === undefined ||
-    lastAllocation.Active ||
-    lastAllocation.Signers.length !== 2
-  ) {
+  if (lastAllocation === undefined || lastAllocation.Active) {
     return undefined;
   }
 
