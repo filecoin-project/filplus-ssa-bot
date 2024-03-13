@@ -23,7 +23,6 @@ app.get("/health", async (req, res) => {
   // if (!(await getDmobHealth())) {
   //   return res.status(400).send("Dmob service is down");
   // }
-  console.log("Checking Health");
   return res.status(200).send("OK");
 });
 

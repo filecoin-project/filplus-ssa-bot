@@ -61,8 +61,8 @@ jobs:
           "containerName": "filplus-ssa-bot",
           "containerPort": 3000,
           "healthCheck": {
-            "healthyThreshold": 2,
-            "unhealthyThreshold": 2,
+            "healthyThreshold": 1,
+            "unhealthyThreshold": 5,
             "timeoutSeconds": 30,
             "intervalSeconds": 60,
             "path": "/health",
