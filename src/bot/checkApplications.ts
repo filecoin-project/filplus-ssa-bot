@@ -4,6 +4,7 @@ import {
   getApplications,
   postApplicationRefill,
   postApplicationTotalDCReached,
+  postError,
 } from "../services/backendService";
 import Metrics from "../services/awsService";
 import { logGeneral, logError, logDebug } from "../utils/consoleLogger";
@@ -122,11 +123,18 @@ export const checkApplication = async (
     );
     return;
   }
-
-  const margin = computeMargin(
-    remainingDatacap,
-    lastRequestAllowance["Allocation Amount"],
-  );
+  let margin;
+  try {
+    margin = computeMargin(
+      remainingDatacap,
+      lastRequestAllowance["Allocation Amount"],
+    );
+  } catch (e) {
+    logError(`Single Client Topup Error: ${e.message}`);
+    // Send error to the backend
+    await postError(application.ID, owner, repo, e.message);
+    return;
+  }
 
   if (margin > 0.25) {
     logGeneral(

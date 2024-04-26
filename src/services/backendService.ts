@@ -118,6 +118,8 @@ export const getApplication = async (
  * Posts a refill request to the backend sending the application ID, the amount to refill and the amount_type.
  *
  * @param {string} applicationId - The application ID.
+ * @param {string} owner - The owner of the application.
+ * @param {string} repo - The repo of the application.
  * @param {string} amount - The amount to refill.
  * @returns {Promise<RequestAllowanceReturn>} The response from the backend.
  */
@@ -157,6 +159,8 @@ export const postApplicationRefill = async (
  * Posts a Total Datacap Reached request to the backend sending the application ID.
  *
  * @param {string} applicationId - The application ID.
+ * @param {string} owner - The owner of the application.
+ * @param {string} repo - The repo of the application.
  * @returns {Promise<RequestAllowanceReturn>} The response from the backend.
  */
 export const postApplicationTotalDCReached = async (
@@ -197,6 +201,38 @@ export const getBackendHealth = async (): Promise<boolean> => {
     const response = await axios({
       method: "GET",
       url: `${config.backendApi}/health`,
+    });
+    return response.data === "OK";
+  } catch (error) {
+    return false;
+  }
+};
+
+/**
+ * Sends an error message to the backend.
+ *
+ * @param {string} applicationId - The application ID.
+ * @param {string} owner - The owner of the application.
+ * @param {string} repo - The repo of the application.
+ * @param {string} message - The error message.
+ * @returns {Promise<boolean>} The response from the backend.
+ */
+export const postError = async (
+  applicationId: string,
+  owner: string,
+  repo: string,
+  message: string,
+): Promise<boolean> => {
+  try {
+    const response = await axios({
+      method: "POST",
+      url: `${config.backendApi}/refill/error`,
+      data: {
+        id: applicationId,
+        owner,
+        repo,
+        message,
+      },
     });
     return response.data === "OK";
   } catch (error) {
