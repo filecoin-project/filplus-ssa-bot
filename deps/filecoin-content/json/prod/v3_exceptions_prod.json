@@ -1,116 +1,116 @@
 [
-    {
-        "identifier":"Antarctic LDN-01-DLTX Seal Storage Technology",
-        "notary_msig":"f01815941",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "499"
-    },
-    {
-        "identifier":"Antarctic LDN-02-DLTX Seal Storage Technology",
-        "notary_msig":"f01815952",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "500"
-    },
-    {
-        "identifier":"Antarctic LDN-03-Holon Seal Storage Technology",
-        "notary_msig":"f01815959",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "501"
-    },
-    {
-        "identifier":"Antarctic LDN-04-W3b Seal Storage Technology",
-        "notary_msig":"f01815962",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "502"
-    },
-    {
-        "identifier":"Antarctic LDN-05-PikNik Seal Storage Technology",
-        "notary_msig":"f01815969",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "503"
-    },
-    {
-        "identifier":"Antarctic LDN-06-ElioVP Seal Storage Technology",
-        "notary_msig":"f01815970",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "504"
-    },
-    {
-        "identifier":"Antarctic LDN-07-Seal Seal Storage Technology",
-        "notary_msig":"f01815972",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "505"
-    },
-    {
-        "identifier":"Antarctic LDN-08-Seal Seal Storage Technology",
-        "notary_msig":"f01815975",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "506"
-    },
-    {
-        "identifier":"Antarctic LDN-09-Seal Seal Storage Technology",
-        "notary_msig":"f01815981",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "507"
-    },
-    {
-        "identifier":"Antarctic LDN-10-Seal Seal Storage Technology",
-        "notary_msig":"f01815985",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "508"
-    },
-    {
-        "identifier":"Bearded LDN-01 Seal Storage Technology",
-        "notary_msig":"f01849047",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "100"
-    },
-    {
-        "identifier":"Bearded LDN-02 Seal Storage Technology",
-        "notary_msig":"f01849049",
-	    "notary_msig_datacap": "2PiB",
-	    "notary_msig_issue_number" : "548"
-    },
-    {
-        "identifier":"CognoCloud",
-        "notary_msig":"f01924203",
-	    "notary_msig_datacap": "2PiB",
-	    "notary_msig_issue_number" : "617"
-    },
-    {
-        "identifier":"Victor Chang Cardiac Research Institute",
-        "notary_msig":"f01885534",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "578"
-    },
-    {
-        "identifier":"Spexi Geospatial Inc",
-        "notary_msig":"f01924200",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "616"
-    },
-    {
-        "identifier":"The New Ads",
-        "notary_msig":"f01924186",
-	    "notary_msig_datacap": "5PiB",
-	    "notary_msig_issue_number" : "618"
-    },
-    {
-        "identifier":"Project Beacon",
-        "notary_msig":"f01885528",
-	    "notary_msig_datacap": "7PiB",
-	    "notary_msig_issue_number" : "576"
-    },
-    {
-        "identifier":"Bearded LDN-03 Seal Storage Technology",
-        "notary_msig":"f01924196",
-	    "notary_msig_datacap": "3.1PiB",
-	    "notary_msig_issue_number" : "615"
-    },
-    {
-        "identifier":"E-fil",
-        "notary_msig":"f01940930",
-	    "notary_msig_datacap": "50PiB",
-	    "notary_msig_issue_number" : "646"
-    }
+  {
+    "identifier": "Antarctic LDN-01-DLTX Seal Storage Technology",
+    "notary_msig": "f01815941",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "499"
+  },
+  {
+    "identifier": "Antarctic LDN-02-DLTX Seal Storage Technology",
+    "notary_msig": "f01815952",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "500"
+  },
+  {
+    "identifier": "Antarctic LDN-03-Holon Seal Storage Technology",
+    "notary_msig": "f01815959",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "501"
+  },
+  {
+    "identifier": "Antarctic LDN-04-W3b Seal Storage Technology",
+    "notary_msig": "f01815962",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "502"
+  },
+  {
+    "identifier": "Antarctic LDN-05-PikNik Seal Storage Technology",
+    "notary_msig": "f01815969",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "503"
+  },
+  {
+    "identifier": "Antarctic LDN-06-ElioVP Seal Storage Technology",
+    "notary_msig": "f01815970",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "504"
+  },
+  {
+    "identifier": "Antarctic LDN-07-Seal Seal Storage Technology",
+    "notary_msig": "f01815972",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "505"
+  },
+  {
+    "identifier": "Antarctic LDN-08-Seal Seal Storage Technology",
+    "notary_msig": "f01815975",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "506"
+  },
+  {
+    "identifier": "Antarctic LDN-09-Seal Seal Storage Technology",
+    "notary_msig": "f01815981",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "507"
+  },
+  {
+    "identifier": "Antarctic LDN-10-Seal Seal Storage Technology",
+    "notary_msig": "f01815985",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "508"
+  },
+  {
+    "identifier": "Bearded LDN-01 Seal Storage Technology",
+    "notary_msig": "f01849047",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "100"
+  },
+  {
+    "identifier": "Bearded LDN-02 Seal Storage Technology",
+    "notary_msig": "f01849049",
+    "notary_msig_datacap": "2PiB",
+    "notary_msig_issue_number": "548"
+  },
+  {
+    "identifier": "CognoCloud",
+    "notary_msig": "f01924203",
+    "notary_msig_datacap": "2PiB",
+    "notary_msig_issue_number": "617"
+  },
+  {
+    "identifier": "Victor Chang Cardiac Research Institute",
+    "notary_msig": "f01885534",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "578"
+  },
+  {
+    "identifier": "Spexi Geospatial Inc",
+    "notary_msig": "f01924200",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "616"
+  },
+  {
+    "identifier": "The New Ads",
+    "notary_msig": "f01924186",
+    "notary_msig_datacap": "5PiB",
+    "notary_msig_issue_number": "618"
+  },
+  {
+    "identifier": "Project Beacon",
+    "notary_msig": "f01885528",
+    "notary_msig_datacap": "7PiB",
+    "notary_msig_issue_number": "576"
+  },
+  {
+    "identifier": "Bearded LDN-03 Seal Storage Technology",
+    "notary_msig": "f01924196",
+    "notary_msig_datacap": "3.1PiB",
+    "notary_msig_issue_number": "615"
+  },
+  {
+    "identifier": "E-fil",
+    "notary_msig": "f01940930",
+    "notary_msig_datacap": "50PiB",
+    "notary_msig_issue_number": "646"
+  }
 ]
