@@ -9,6 +9,7 @@
     "watch-ts": "tsc -w",
     "eslint": "eslint 'src/**'",
     "eslint-fix": "eslint 'src/**' --fix",
+    "prettier": "npx prettier --check .",
     "prod-start": "NODE_ENV=prod npm run build && npm start",
     "dev-start": "NODE_ENV=test npm run build && npm start",
     "start": "NODE_ENV=prod npm run build && node dist/index.js",
