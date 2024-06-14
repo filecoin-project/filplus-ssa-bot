@@ -189,7 +189,7 @@ describe("Datacap Allocation Functions", () => {
       };
 
       const logSpy = jest.spyOn(console, "log");
-      await checkApplication(app, [], 'keyko-io', 'test-philip-the-second');
+      await checkApplication(app, [], "keyko-io", "test-philip-the-second");
       expect(logSpy).toHaveBeenCalledWith(
         expect.stringContaining(
           "the issue still needs to get the 1st round of datacap",
@@ -269,7 +269,7 @@ describe("Datacap Allocation Functions", () => {
         ],
       };
       const logSpy = jest.spyOn(console, "log");
-      await checkApplication(app, [], 'keyko-io', 'test-philip-the-second');
+      await checkApplication(app, [], "keyko-io", "test-philip-the-second");
       expect(logSpy).toHaveBeenCalledWith(
         expect.stringContaining("No client found for address Address1"),
       );
@@ -352,9 +352,9 @@ describe("Datacap Allocation Functions", () => {
         error: "Error getting allowance for address in test",
         success: false,
       });
-      await expect(checkApplication(app, apiClients, 'keyko-io', 'test-philip-the-second')).rejects.toThrow(
-        "Error getting allowance for address in test",
-      );
+      await expect(
+        checkApplication(app, apiClients, "keyko-io", "test-philip-the-second"),
+      ).rejects.toThrow("Error getting allowance for address in test");
     }, 60000);
 
     /**
@@ -430,7 +430,12 @@ describe("Datacap Allocation Functions", () => {
       };
 
       const logSpy = jest.spyOn(console, "log");
-      await checkApplication(app, apiClients, 'keyko-io', 'test-philip-the-second');
+      await checkApplication(
+        app,
+        apiClients,
+        "keyko-io",
+        "test-philip-the-second",
+      );
       expect(logSpy).toHaveBeenCalledWith(
         expect.stringContaining("No active last request allowance found"),
       );
@@ -505,7 +510,12 @@ describe("Datacap Allocation Functions", () => {
         ],
       };
       const logSpy = jest.spyOn(console, "log");
-      await checkApplication(app, apiClients, 'keyko-io', 'test-philip-the-second');
+      await checkApplication(
+        app,
+        apiClients,
+        "keyko-io",
+        "test-philip-the-second",
+      );
       expect(logSpy).toHaveBeenCalledWith(
         expect.stringContaining("No active last request allowance found"),
       );
@@ -585,7 +595,12 @@ describe("Datacap Allocation Functions", () => {
         error: "",
         success: true,
       });
-      await checkApplication(app, apiClients, 'keyko-io', 'test-philip-the-second');
+      await checkApplication(
+        app,
+        apiClients,
+        "keyko-io",
+        "test-philip-the-second",
+      );
       expect(logSpy).toHaveBeenCalledWith(
         expect.stringContaining(
           "datacap remaining / datacap allocated: 48.07% - doesn't need more allowance",
@@ -676,11 +691,16 @@ describe("Datacap Allocation Functions", () => {
               success: true,
             }),
         );
-      await checkApplication(app, apiClients, 'keyko-io', 'test-philip-the-second');
+      await checkApplication(
+        app,
+        apiClients,
+        "keyko-io",
+        "test-philip-the-second",
+      );
       expect(mockPostApplicationRefill).toHaveBeenCalledWith(
         "222",
-        'keyko-io', 
-        'test-philip-the-second',
+        "keyko-io",
+        "test-philip-the-second",
         "512",
         "TiB",
       );
@@ -694,8 +714,8 @@ describe("Datacap Allocation Functions", () => {
     it("should return correct data when calling postApplicationRefill", async () => {
       const ret = await backendService.postApplicationRefill(
         "222",
-        'keyko-io', 
-        'test-philip-the-second',
+        "keyko-io",
+        "test-philip-the-second",
         "500",
         "TiB",
       );
