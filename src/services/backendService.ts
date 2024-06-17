@@ -1,12 +1,13 @@
 import axios from "axios";
 import { config } from "../config";
 import { logDebug } from "../utils/consoleLogger";
-import {
-  type RequestAllocatorsReturn,
-  type RequestApplicationsReturn,
-  type RequestApplicationReturn,
-  type Application,
-  type RequestAllowanceReturn,
+import type {
+  RequestAllocatorsReturn,
+  RequestApplicationsReturn,
+  RequestApplicationReturn,
+  Application,
+  RequestAllowanceReturn,
+  Allocator,
 } from "../types/types";
 
 /**
@@ -14,27 +15,31 @@ import {
  *
  * @returns {Promise<RequestAllocatorsReturn>} The list of allocators
  */
-export const getAllocators = async (): Promise<RequestAllocatorsReturn> => {
-  logDebug(`Requesting allocators from backend`);
-  try {
-    const response = await axios({
-      method: "GET",
-      url: `${config.backendApi}/allocators`,
-    });
-    return {
-      data: response.data,
-      error: "",
-      success: true,
-    };
-  } catch (error) {
-    const errMessage = `Error accessing Backend API /allocator: ${error.message}`;
-    return {
-      data: [],
-      error: errMessage,
-      success: false,
-    };
-  }
-};
+export const getAllocatorsWithSSABotEnabled =
+  async (): Promise<RequestAllocatorsReturn> => {
+    logDebug(`Requesting allocators from backend`);
+    try {
+      const response = await axios({
+        method: "GET",
+        url: `${config.backendApi}/allocators`,
+      });
+      const allocatorsWithSSABotEnabled = response.data.filter(
+        (allocator: Allocator) => !allocator.disable_ssa_bot,
+      );
+      return {
+        data: allocatorsWithSSABotEnabled,
+        error: "",
+        success: true,
+      };
+    } catch (error) {
+      const errMessage = `Error accessing Backend API /allocator: ${error.message}`;
+      return {
+        data: [],
+        error: errMessage,
+        success: false,
+      };
+    }
+  };
 
 /**
  * Gets all the applications from the backend.

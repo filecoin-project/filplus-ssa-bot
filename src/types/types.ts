@@ -191,6 +191,7 @@ export interface Allocator {
   installation_id: number;
   multisig_address: string;
   verifiers_gh_handles: string;
+  disable_ssa_bot: boolean;
 }
 
 export interface RequestAllocatorsReturn {

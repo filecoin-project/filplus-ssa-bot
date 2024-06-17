@@ -1,6 +1,6 @@
 import { getApiClients } from "../services/filplusService";
 import {
-  getAllocators,
+  getAllocatorsWithSSABotEnabled,
   getApplications,
   postApplicationRefill,
   postApplicationTotalDCReached,
@@ -39,7 +39,7 @@ export const checkApplications = async (): Promise<void> => {
     data: allocators,
     error: allocatorsError,
     success: allocatorSuccess,
-  } = await getAllocators();
+  } = await getAllocatorsWithSSABotEnabled();
   if (!allocatorSuccess) {
     logError(`Get Allocators Error: ${allocatorsError}`);
   }
