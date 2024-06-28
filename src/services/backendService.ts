@@ -121,23 +121,19 @@ export const getApplication = async (
  * @param {string} amount - The amount to refill.
  * @returns {Promise<RequestAllowanceReturn>} The response from the backend.
  */
-export const postApplicationRefill = async (
-  applicationId: string,
+export const postNotifyRefill = async (
+  issueNumber: string,
   owner: string,
   repo: string,
-  amount: string,
-  amountType,
 ): Promise<RequestAllowanceReturn> => {
   try {
     const response = await axios({
       method: "POST",
-      url: `${config.backendApi}/application/refill`,
+      url: `${config.backendApi}/application/notify_refill`,
       data: {
-        id: applicationId,
+        issue_number: issueNumber,
         owner,
         repo,
-        amount,
-        amount_type: amountType,
       },
     });
     return {
@@ -145,7 +141,7 @@ export const postApplicationRefill = async (
       success: response.data as boolean,
     };
   } catch (error) {
-    const errMessage = `Error accessing Backend API /application/refill ${owner}/${repo}: ${error.message}`;
+    const errMessage = `Error accessing Backend API /application/notify_refill ${owner}/${repo}: ${error.message}`;
     return {
       error: errMessage,
       success: false,

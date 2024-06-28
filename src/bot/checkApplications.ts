@@ -2,7 +2,7 @@ import { getApiClients } from "../services/filplusService";
 import {
   getAllocators,
   getApplications,
-  postApplicationRefill,
+  postNotifyRefill,
   postApplicationTotalDCReached,
 } from "../services/backendService";
 import Metrics from "../services/awsService";
@@ -251,12 +251,10 @@ export const requestAllowance = async (
     }
   } else {
     try {
-      response = await postApplicationRefill(
-        application.ID,
+      response = await postNotifyRefill(
+        application["Issue Number"],
         owner,
         repo,
-        amountToRequest.amount.toString(),
-        amountToRequest.amountType,
       );
       logGeneral(
         `${config.logPrefix} ${owner}/${repo} - ${application.ID} Refill request sent for ${amountToRequest.amount} ${amountToRequest.amountType}`,

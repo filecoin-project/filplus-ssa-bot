@@ -16,10 +16,10 @@ describe("Datacap Allocation Functions", () => {
    */
   describe("checkApplications", () => {
     /**
-     * Before each test, mock `postApplicationRefill` in order to return a success response.
+     * Before each test, mock `postNotifyRefill` in order to return a success response.
      */
     beforeEach(() => {
-      jest.spyOn(backendService, "postApplicationRefill").mockResolvedValue({
+      jest.spyOn(backendService, "postNotifyRefill").mockResolvedValue({
         error: "",
         success: true,
       });
@@ -91,10 +91,10 @@ describe("Datacap Allocation Functions", () => {
     let apiClients;
 
     /**
-     * Before each test, mock `postApplicationRefill` in order to return a success response.
+     * Before each test, mock `postNotifyRefill` in order to return a success response.
      */
     beforeEach(() => {
-      jest.spyOn(backendService, "postApplicationRefill").mockResolvedValue({
+      jest.spyOn(backendService, "postNotifyRefill").mockResolvedValue({
         error: "Test error from getApiClients",
         success: true,
       });
@@ -682,8 +682,8 @@ describe("Datacap Allocation Functions", () => {
         error: "",
         success: true,
       });
-      const mockPostApplicationRefill = jest
-        .spyOn(backendService, "postApplicationRefill")
+      const mockpostNotifyRefill = jest
+        .spyOn(backendService, "postNotifyRefill")
         .mockImplementation(
           async () =>
             await Promise.resolve({
@@ -697,27 +697,23 @@ describe("Datacap Allocation Functions", () => {
         "keyko-io",
         "test-philip-the-second",
       );
-      expect(mockPostApplicationRefill).toHaveBeenCalledWith(
-        "222",
+      expect(mockpostNotifyRefill).toHaveBeenCalledWith(
+        "359",
         "keyko-io",
         "test-philip-the-second",
-        "512",
-        "TiB",
       );
     }, 60000);
   });
 
   /**
-   * Tests for postApplicationRefill functionality.
+   * Tests for postNotifyRefill functionality.
    */
-  describe("postApplicationRefill", () => {
-    it("should return correct data when calling postApplicationRefill", async () => {
-      const ret = await backendService.postApplicationRefill(
-        "222",
+  describe("postNotifyRefill", () => {
+    it("should return correct data when calling postNotifyRefill", async () => {
+      const ret = await backendService.postNotifyRefill(
+        "359",
         "keyko-io",
         "test-philip-the-second",
-        "500",
-        "TiB",
       );
       expect(ret.success).toEqual(true);
     }, 60000);
