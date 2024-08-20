@@ -4,12 +4,6 @@ export interface ApiClientsResponse {
   data: DmobClient[];
 }
 
-export interface ApiAllowanceResponse {
-  error: string;
-  success: boolean;
-  data: string;
-}
-
 export interface ByteConverterAutoscaleOptions {
   preferByte: boolean;
   preferBit: boolean;
