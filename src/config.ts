@@ -3,8 +3,7 @@ dotenv.config({ path: `./.env` });
 
 export const config = {
   filplusApi:
-    process.env.DMOB_API_URL ??
-    "https://api.filplus.d.interplanetary.one/public/api",
+    process.env.DMOB_API_URL ?? "https://api.datacapstats.io/public/api",
   filplusApiKey: process.env.DMOB_API_KEY,
   backendApi: process.env.BACKEND_API_URL ?? "http://localhost:8080",
   logPrefix: "Application ID",
