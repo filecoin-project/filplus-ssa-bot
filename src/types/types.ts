@@ -227,3 +227,9 @@ export interface CheckApplicationReturn {
   newAllocationNeeded: boolean;
   amount?: string;
 }
+
+export interface GetVerifiedClientStatusReturn {
+  success: boolean;
+  error: string;
+  data: string;
+}

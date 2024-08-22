@@ -13,4 +13,5 @@ export const config = {
   awsAccessKeyId: process.env.AWS_ACCESS_KEY_ID ?? "",
   awsSecretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? "",
   networkType: process.env.NETWORK_TYPE ?? "production",
+  glifApi: process.env.GLIF_API_URL ?? "https://api.node.glif.io/rpc/v0",
 };

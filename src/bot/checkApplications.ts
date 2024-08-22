@@ -16,6 +16,7 @@ import {
 } from "../types/types";
 import { config } from "../config";
 import { anyToBytes, calculateAllocationToRequest } from "../utils/utils";
+import { getVerifiedClientStatus } from "../services/glifService";
 
 const metrics = Metrics.getInstance();
 
@@ -132,9 +133,36 @@ export const checkApplication = async (
     logGeneral(
       `${config.logPrefix} ${
         application.ID
-      } datacap remaining / datacap allocated: ${(margin * 100).toFixed(
+      } datacap remaining (DMOB) / datacap allocated: ${(margin * 100).toFixed(
         2,
       )}% - doesn't need more allowance`,
+    );
+    return;
+  }
+
+  // double check, as remainingDatacap from DMOB is often outdated
+  const {
+    data: glifRemainingDatacap,
+    success,
+    error,
+  } = await getVerifiedClientStatus(client?.addressId);
+  if (!success) {
+    logError(error);
+    return;
+  }
+
+  const glifMargin = computeMargin(
+    glifRemainingDatacap,
+    lastRequestAllowance["Allocation Amount"],
+  );
+
+  if (glifMargin > 0.25) {
+    logGeneral(
+      `${config.logPrefix} ${
+        application.ID
+      } datacap remaining (Glif) / datacap allocated: ${(
+        glifMargin * 100
+      ).toFixed(2)}% - doesn't need more allowance`,
     );
     return;
   }
@@ -142,9 +170,9 @@ export const checkApplication = async (
   logGeneral(
     `${config.logPrefix} ${
       application.ID
-    } datacap remaining / datacap allocated: ${(margin * 100).toFixed(
-      2,
-    )}% - Needs more allowance`,
+    } datacap remaining (Glif) / datacap allocated: ${(
+      glifMargin * 100
+    ).toFixed(2)}% - Needs more allowance`,
   );
   const amountToRequest = calculateAmountToRequest(application);
   await requestAllowance(application, owner, repo, amountToRequest);
