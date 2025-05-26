@@ -16,7 +16,13 @@ import {
 } from "../types/types";
 import { config } from "../config";
 import { anyToBytes, calculateAllocationToRequest } from "../utils/utils";
-import { getVerifiedClientStatus } from "../services/glifService";
+import {
+  getEvmAddressFromFilecoinAddress,
+  makeStaticEthCall,
+  getVerifiedClientStatus,
+} from "../services/glifService";
+import { decodeFunctionResult, encodeFunctionData, parseAbi } from "viem";
+import type { Hex } from "viem/types/misc";
 
 const metrics = Metrics.getInstance();
 
@@ -113,8 +119,31 @@ export const checkApplication = async (
     );
     return;
   }
-
-  const remainingDatacap = client?.allowance ?? "0";
+  const usesClientSmartContract =
+    application?.["Client Contract Address"] !== undefined &&
+    application?.["Client Contract Address"].length > 0;
+  let remainingDatacap: string;
+  if (usesClientSmartContract) {
+    try {
+      const clientAllowanceFromContract =
+        await getClientAllowanceFormClientContract(
+          client?.address,
+          application?.["Client Contract Address"] as string,
+        );
+      if (clientAllowanceFromContract === undefined) {
+        logError(
+          `Failed to get Client allowance from contract for ${config.logPrefix} ${application.ID} `,
+        );
+        return;
+      }
+      remainingDatacap = clientAllowanceFromContract.toString();
+    } catch (e) {
+      logError(`Geting client allowance from contract failed: ${e.message}`);
+      return;
+    }
+  } else {
+    remainingDatacap = client?.allowance ?? "0";
+  }
 
   const lastRequestAllowance = getLastRequestAllowance(application);
   if (lastRequestAllowance === undefined) {
@@ -133,47 +162,59 @@ export const checkApplication = async (
     logGeneral(
       `${config.logPrefix} ${
         application.ID
-      } datacap remaining (DMOB) / datacap allocated: ${(margin * 100).toFixed(
-        2,
-      )}% - doesn't need more allowance`,
-    );
-    return;
-  }
-
-  // double check, as remainingDatacap from DMOB is often outdated
-  const {
-    data: glifRemainingDatacap,
-    success,
-    error,
-  } = await getVerifiedClientStatus(client?.addressId);
-  if (!success) {
-    logError(error);
-    return;
-  }
-
-  const glifMargin = computeMargin(
-    glifRemainingDatacap,
-    lastRequestAllowance["Allocation Amount"],
-  );
-
-  if (glifMargin > 0.25) {
-    logGeneral(
-      `${config.logPrefix} ${
-        application.ID
-      } datacap remaining (Glif) / datacap allocated: ${(
-        glifMargin * 100
+      } datacap remaining (DMOB / Client Smart Contract) / datacap allocated: ${(
+        margin * 100
       ).toFixed(2)}% - doesn't need more allowance`,
     );
     return;
   }
 
-  logGeneral(
-    `${config.logPrefix} ${
-      application.ID
-    } datacap remaining (Glif) / datacap allocated: ${(
-      glifMargin * 100
-    ).toFixed(2)}% - Needs more allowance`,
-  );
+  if (usesClientSmartContract) {
+    // double check, as remainingDatacap from DMOB is often outdated
+
+    const {
+      data: glifRemainingDatacap,
+      success,
+      error,
+    } = await getVerifiedClientStatus(client?.addressId);
+    if (!success) {
+      logError(error);
+      return;
+    }
+
+    const glifMargin = computeMargin(
+      glifRemainingDatacap,
+      lastRequestAllowance["Allocation Amount"],
+    );
+
+    if (glifMargin > 0.25) {
+      logGeneral(
+        `${config.logPrefix} ${
+          application.ID
+        } datacap remaining (Glif) / datacap allocated: ${(
+          glifMargin * 100
+        ).toFixed(2)}% - doesn't need more allowance`,
+      );
+      return;
+    }
+
+    logGeneral(
+      `${config.logPrefix} ${
+        application.ID
+      } datacap remaining (Glif) / datacap allocated: ${(
+        glifMargin * 100
+      ).toFixed(2)}% - Needs more allowance`,
+    );
+  } else {
+    logGeneral(
+      `${config.logPrefix} ${
+        application.ID
+      } datacap remaining (Client Smart Contract) / datacap allocated: ${(
+        margin * 100
+      ).toFixed(2)}% - Needs more allowance`,
+    );
+  }
+
   const amountToRequest = calculateAmountToRequest(application);
   await requestAllowance(application, owner, repo, amountToRequest);
 
@@ -212,27 +253,30 @@ export const calculateAmountToRequest = (
 };
 
 /**
- * Get the last request allowance from the application object.
+ * Get the newest allocation request based on the "Updated At" field.
  *
  * @param {Application} application - The application object.
- * @returns {RequestInformation} - The last request allowance.
+ * @returns {AllocationRequest | undefined} - The newest allocation request.
  */
 export const getLastRequestAllowance = (
   application: Application,
 ): AllocationRequest | undefined => {
-  if (application.Lifecycle["Active Request ID"] === null) {
+  if (application["Allocation Requests"].length === 0) {
     return undefined;
   }
-  const lastAllocation = application["Allocation Requests"].find(
-    (allocation: AllocationRequest) =>
-      allocation.ID === application.Lifecycle["Active Request ID"],
+
+  return application["Allocation Requests"].reduce(
+    (newest: AllocationRequest | undefined, current: AllocationRequest) => {
+      if (
+        newest === undefined ||
+        new Date(current["Updated At"]) > new Date(newest["Updated At"])
+      ) {
+        return current;
+      }
+      return newest;
+    },
+    undefined,
   );
-
-  if (lastAllocation === undefined || lastAllocation.Active) {
-    return undefined;
-  }
-
-  return lastAllocation;
 };
 
 /**
@@ -293,4 +337,41 @@ export const requestAllowance = async (
     }
   }
   return { success: response.data as boolean, error: "" };
+};
+
+const getClientAllowanceFormClientContract = async (
+  clientAddress: string,
+  contractAddress: string,
+): Promise<bigint | undefined> => {
+  const abi = parseAbi([
+    "function allowances(address client) external view returns (uint256)",
+  ]);
+
+  const [evmClientAddress, evmContractAddress] = await Promise.all([
+    getEvmAddressFromFilecoinAddress(clientAddress),
+    getEvmAddressFromFilecoinAddress(contractAddress),
+  ]);
+  if (evmClientAddress.data === null || evmContractAddress.data === null) {
+    return;
+  }
+  const calldataHex: Hex = encodeFunctionData({
+    abi,
+    args: [evmClientAddress.data],
+  });
+
+  const response = await makeStaticEthCall(
+    evmContractAddress.data,
+    calldataHex,
+  );
+
+  if (response.error.length > 0) {
+    return;
+  }
+
+  const decodedData = decodeFunctionResult({
+    abi,
+    data: response.data as `0x${string}`,
+  });
+
+  return decodedData;
 };
