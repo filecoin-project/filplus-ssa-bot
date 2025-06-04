@@ -1,3 +1,5 @@
+import type { Address } from "viem";
+
 export interface ApiClientsResponse {
   error: string;
   success: boolean;
@@ -123,8 +125,8 @@ export interface Application {
   Datacap: Datacap;
   Lifecycle: Lifecycle;
   "Allocation Requests": AllocationRequest[];
+  "Client Contract Address"?: string;
 }
-
 export interface Client {
   Name: string;
   Region: string;
@@ -231,5 +233,17 @@ export interface CheckApplicationReturn {
 export interface GetVerifiedClientStatusReturn {
   success: boolean;
   error: string;
+  data: string;
+}
+
+export interface ApiFilecoinAddressToEthAddressResponse {
+  error: string;
+  success: boolean;
+  data: Address | null;
+}
+
+export interface ApiEthCallResponse {
+  error: string;
+  success: boolean;
   data: string;
 }
