@@ -169,7 +169,7 @@ export const checkApplication = async (
     return;
   }
 
-  if (usesClientSmartContract) {
+  if (!usesClientSmartContract) {
     // double check, as remainingDatacap from DMOB is often outdated
 
     const {
