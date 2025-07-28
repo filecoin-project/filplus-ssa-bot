@@ -262,7 +262,7 @@ export const getLastRequestAllowance = (
   application: Application,
 ): AllocationRequest | undefined => {
   const positiveAllocations = application["Allocation Requests"].filter(
-    (allocation) => allocation["Request Type"] !== "Decrease"
+    (allocation) => allocation["Request Type"] !== "Decrease",
   );
 
   if (positiveAllocations.length === 0) {

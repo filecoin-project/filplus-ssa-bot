@@ -1,9 +1,7 @@
 import { config } from "../config";
 import { logDebug } from "./consoleLogger";
-import type {
-  RequestAmount
-} from "../types/types";
-import bytes from 'bytes-iec'
+import type { RequestAmount } from "../types/types";
+import bytes from "bytes-iec";
 
 /**
  * This function is used to convert string formatted bytes to bytes
@@ -13,16 +11,16 @@ import bytes from 'bytes-iec'
  */
 export function anyToBytes(inputDatacap: string): number {
   try {
-    const parsedBytes = bytes.parse(inputDatacap)
+    const parsedBytes = bytes.parse(inputDatacap);
     if (parsedBytes) {
-      return parsedBytes
+      return parsedBytes;
     } else {
-      console.error(`Failed to parse string ${inputDatacap} into bytes`)
-      return 0
+      console.error(`Failed to parse string ${inputDatacap} into bytes`);
+      return 0;
     }
   } catch (e) {
-    console.error(e)
-    return 0
+    console.error(e);
+    return 0;
   }
 }
 /**
@@ -33,16 +31,16 @@ export function anyToBytes(inputDatacap: string): number {
  */
 export function bytesToiB(inputBytes: number): string {
   try {
-    const parsedValue = bytes(inputBytes, { mode: 'binary' })
+    const parsedValue = bytes(inputBytes, { mode: "binary" });
     if (parsedValue) {
-      return parsedValue
+      return parsedValue;
     } else {
-      console.error(`Failed to parse bytes ${inputBytes} into string`)
-      return '0GiB'
+      console.error(`Failed to parse bytes ${inputBytes} into string`);
+      return "0GiB";
     }
   } catch (e) {
-    console.error(e)
-    return '0GiB'
+    console.error(e);
+    return "0GiB";
   }
 }
 
