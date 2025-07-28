@@ -12,7 +12,7 @@ import bytes from "bytes-iec";
 export function anyToBytes(inputDatacap: string): number {
   try {
     const parsedBytes = bytes.parse(inputDatacap);
-    if (parsedBytes) {
+    if (parsedBytes !== null) {
       return parsedBytes;
     } else {
       console.error(`Failed to parse string ${inputDatacap} into bytes`);
@@ -32,7 +32,7 @@ export function anyToBytes(inputDatacap: string): number {
 export function bytesToiB(inputBytes: number): string {
   try {
     const parsedValue = bytes(inputBytes, { mode: "binary" });
-    if (parsedValue) {
+    if (parsedValue !== null) {
       return parsedValue;
     } else {
       console.error(`Failed to parse bytes ${inputBytes} into string`);
