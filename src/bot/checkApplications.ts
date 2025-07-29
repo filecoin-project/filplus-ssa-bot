@@ -261,11 +261,15 @@ export const calculateAmountToRequest = (
 export const getLastRequestAllowance = (
   application: Application,
 ): AllocationRequest | undefined => {
-  if (application["Allocation Requests"].length === 0) {
+  const positiveAllocations = application["Allocation Requests"].filter(
+    (allocation) => allocation["Request Type"] !== "Decrease",
+  );
+
+  if (positiveAllocations.length === 0) {
     return undefined;
   }
 
-  return application["Allocation Requests"].reduce(
+  return positiveAllocations.reduce(
     (newest: AllocationRequest | undefined, current: AllocationRequest) => {
       if (
         newest === undefined ||

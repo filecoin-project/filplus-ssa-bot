@@ -1,12 +1,7 @@
-import ByteConverter from "@wtfcode/byte-converter";
 import { config } from "../config";
 import { logDebug } from "./consoleLogger";
-import type {
-  RequestAmount,
-  ByteConverterAutoscaleOptions,
-} from "../types/types";
-
-const byteConverter = new ByteConverter();
+import type { RequestAmount } from "../types/types";
+import bytes from "bytes-iec";
 
 /**
  * This function is used to convert string formatted bytes to bytes
@@ -15,62 +10,19 @@ const byteConverter = new ByteConverter();
  * @returns number
  */
 export function anyToBytes(inputDatacap: string): number {
-  const allowedExtensions = [
-    "b",
-    "B",
-    "kb",
-    "kB",
-    "Kib",
-    "KiB",
-    "Mb",
-    "MB",
-    "Mib",
-    "MiB",
-    "Gb",
-    "GB",
-    "Gib",
-    "GiB",
-    "Tb",
-    "TB",
-    "Tib",
-    "TiB",
-    "Pb",
-    "PB",
-    "Pib",
-    "PiB",
-    "Eb",
-    "EB",
-    "Eib",
-    "EiB",
-    "Zb",
-    "ZB",
-    "Zib",
-    "ZiB",
-    "Yb",
-    "YB",
-    "Yib",
-    "YiB",
-  ];
-  const formatDc = inputDatacap
-    .replace(/[t]/g, "T")
-    .replace(/[b]/g, "B")
-    .replace(/[p]/g, "P")
-    .replace(/[I]/g, "i")
-    .replace(/\s*/g, "");
-  const ext = formatDc.replace(/[0-9.]/g, "");
-
-  if (!allowedExtensions.includes(ext)) {
-    throw new Error(
-      `Invalid datacap format. Allowed extensions are: ${allowedExtensions.join(
-        ", ",
-      )}`,
-    );
+  try {
+    const parsedBytes = bytes.parse(inputDatacap);
+    if (parsedBytes !== null) {
+      return parsedBytes;
+    } else {
+      console.error(`Failed to parse string ${inputDatacap} into bytes`);
+      return 0;
+    }
+  } catch (e) {
+    console.error(e);
+    return 0;
   }
-  const datacap = formatDc.replace(/[^0-9.]/g, "");
-  const bytes = byteConverter.convert(parseFloat(datacap), ext, "B");
-  return bytes;
 }
-
 /**
  * This function is used to convert bytes to string formatted bytes iB
  *
@@ -78,63 +30,18 @@ export function anyToBytes(inputDatacap: string): number {
  * @returns string
  */
 export function bytesToiB(inputBytes: number): string {
-  const options: {
-    preferByte: boolean;
-    preferBinary: boolean;
-  } = {
-    preferByte: true,
-    preferBinary: true,
-  };
-  let autoscale = byteConverter.autoScale(
-    inputBytes,
-    "B",
-    options as ByteConverterAutoscaleOptions,
-  );
-  // this is bc it cannot convert 1099511627776000 to 1PiB and it convert to 9 YiB
-  let stringVal = "";
-  if (autoscale.dataFormat === "YiB") {
-    autoscale = byteConverter.autoScale(
-      inputBytes - 32,
-      "B",
-      options as ByteConverterAutoscaleOptions,
-    );
-    return `${autoscale.value.toFixed(1)}${autoscale.dataFormat}`;
+  try {
+    const parsedValue = bytes(inputBytes, { mode: "binary" });
+    if (parsedValue !== null) {
+      return parsedValue;
+    } else {
+      console.error(`Failed to parse bytes ${inputBytes} into string`);
+      return "0GiB";
+    }
+  } catch (e) {
+    console.error(e);
+    return "0GiB";
   }
-  stringVal = String(autoscale.value);
-
-  const indexOfDot = stringVal.indexOf(".");
-  return `${stringVal.substring(
-    0,
-    indexOfDot > 0 ? indexOfDot : stringVal.length,
-  )}${indexOfDot > 0 ? stringVal.substring(indexOfDot, indexOfDot + 3) : ""}${
-    autoscale.dataFormat
-  }`;
-}
-
-/**
- * This function is used to convert bytes to string formatted bytes B
- *
- * @param inputBytes
- * @returns string
- */
-export function bytesToB(inputBytes: number): string {
-  const options: {
-    preferByte: boolean;
-    preferBinary: boolean;
-  } = {
-    preferByte: true,
-    preferBinary: true,
-  };
-  const autoscale = byteConverter.autoScale(
-    inputBytes,
-    "B",
-    options as ByteConverterAutoscaleOptions,
-  );
-  return `${
-    Number.isInteger(autoscale.value)
-      ? autoscale.value
-      : autoscale.value.toFixed(1)
-  }${autoscale.dataFormat}`;
 }
 
 /**

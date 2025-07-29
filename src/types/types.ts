@@ -6,19 +6,6 @@ export interface ApiClientsResponse {
   data: DmobClient[];
 }
 
-export interface ByteConverterAutoscaleOptions {
-  preferByte: boolean;
-  preferBit: boolean;
-  preferBinary: boolean;
-  preferDecimal: boolean;
-  preferSameBase: boolean;
-  preferOppositeBase: boolean;
-  preferSameUnit: boolean;
-  preferOppositeUnit: boolean;
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  handler: (curDataFormat: string, isUppingDataFormat: boolean) => {};
-}
-
 export interface AllowanceArrayElement {
   // --> sum of it: total datacap granted so far
   id: number; // 5160,
@@ -165,7 +152,7 @@ export interface Lifecycle {
 
 export interface AllocationRequest {
   ID: string;
-  "Request Type": "First" | "Refill";
+  "Request Type": "First" | "Refill" | "Decrease";
   "Created At": string;
   "Updated At": string;
   Active: boolean;
